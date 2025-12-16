@@ -1,0 +1,35 @@
+name: Terraform Frontend
+
+on:
+  push:
+    paths:
+      - "frontend/**"
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID_FRONTEND: ${{ secrets.AWS_ACCESS_KEY_ID_FRONTEND }}
+      AWS_SECRET_ACCESS_KEY_FRONTEND: ${{ secrets.AWS_SECRET_ACCESS_KEY_FRONTEND }}
+      AWS_DEFAULT_REGION_FRONTEND: us-east-1
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+      working-directory: frontend
+      run: terraform init
+
+    - name: Terraform Plan
+      working-directory: frontend
+      run: terraform plan
+
+    - name: Terraform Apply
+      working-directory: frontend
+      run: terraform apply -auto-approve

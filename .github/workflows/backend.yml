@@ -1,0 +1,35 @@
+name: Terraform Backend
+
+on:
+  push:
+    paths:
+      - "backend/**"
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID_BACKEND: ${{ secrets.AWS_ACCESS_KEY_ID_BACKEND }}
+      AWS_SECRET_ACCESS_KEY_BACKEND: ${{ secrets.AWS_SECRET_ACCESS_KEY_BACKEND }}
+      AWS_DEFAULT_REGION_BACKEND: us-east-1
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+      working-directory: backend
+      run: terraform init
+
+    - name: Terraform Plan
+      working-directory: backend
+      run: terraform plan
+
+    - name: Terraform Apply
+      working-directory: backend
+      run: terraform apply -auto-approve
