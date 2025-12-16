@@ -1,35 +1,37 @@
-name: Terraform Frontend
+name: Deploy Frontend
 
 on:
   push:
+    branches: [main]
     paths:
-      - "frontend/**"
-  workflow_dispatch:
+      - "fronted/**"
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
-    env:
-      AWS_ACCESS_KEY_ID_FRONTEND: ${{ secrets.AWS_ACCESS_KEY_ID_FRONTEND }}
-      AWS_SECRET_ACCESS_KEY_FRONTEND: ${{ secrets.AWS_SECRET_ACCESS_KEY_FRONTEND }}
-      AWS_DEFAULT_REGION_FRONTEND: us-east-1
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-    - name: Terraform Init
-      working-directory: frontend
-      run: terraform init
+      - name: Terraform Init
+        working-directory: fronted
+        run: terraform init
 
-    - name: Terraform Plan
-      working-directory: frontend
-      run: terraform plan
+      - name: Terraform Plan
+        working-directory: fronted
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_FRONTEND }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FRONTEND }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform plan
 
-    - name: Terraform Apply
-      working-directory: frontend
-      run: terraform apply -auto-approve
+      - name: Terraform Apply
+        working-directory: fronted
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_FRONTEND }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FRONTEND }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform apply -auto-approve
