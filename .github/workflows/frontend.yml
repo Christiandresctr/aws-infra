@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "fronted/**"
+      - "frontend/**"
 
 jobs:
   terraform:
@@ -17,11 +17,11 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        working-directory: fronted
+        working-directory: frontend
         run: terraform init
 
       - name: Terraform Plan
-        working-directory: fronted
+        working-directory: frontend
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_FRONTEND }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FRONTEND }}
@@ -29,7 +29,7 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        working-directory: fronted
+        working-directory: frontend
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_FRONTEND }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FRONTEND }}
